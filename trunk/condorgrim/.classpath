@@ -4,5 +4,15 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="lib/classad.jar"/>
 	<classpathentry kind="lib" path="lib/condorAPI.jar"/>
+	<classpathentry kind="lib" path="G:/Documents and Settings/Kireta/Desktop/JGRIM.jar"/>
+	<classpathentry kind="lib" path="lib/aopalliance.jar"/>
+	<classpathentry kind="lib" path="lib/spring-beans.jar"/>
+	<classpathentry kind="lib" path="lib/commons-beanutils.jar"/>
+	<classpathentry kind="lib" path="lib/spring-aop.jar"/>
+	<classpathentry kind="lib" path="lib/spring-context-support.jar"/>
+	<classpathentry kind="lib" path="lib/spring-context.jar"/>
+	<classpathentry kind="lib" path="lib/spring-core.jar"/>
+	<classpathentry kind="lib" path="lib/spring-web.jar"/>
+	<classpathentry kind="lib" path="lib/log4j-1.2.14.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

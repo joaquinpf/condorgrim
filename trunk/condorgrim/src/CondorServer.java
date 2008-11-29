@@ -1,6 +1,7 @@
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Hashtable;
@@ -13,16 +14,29 @@ import java.util.Hashtable;
 public class CondorServer {
 
 	/**
-	 * Envia el pedido de ejecucion a Condor y monitorea su completitud.
-	 * @param executable Path del ejecutable a correr
-	 * @param properties Propiedades a setear en Condor
-	 * @return Respuesta de Condor
+	 * Descubre el tipo del objeto pasado por parametro.
+	 * @param parameter Objeto del que se desea conocer su clase
+	 * @return Class tipo del objeto pasado por parametro
 	 */
-	public final Object runCondorJob(final String executable, 
-			final Hashtable<String, String> properties) {
-		//TODO mandar el trabajo a condor
+	private Class convertParameterClass(Object parameter) {
+		if (parameter instanceof Integer)
+			return Integer.TYPE;
+		else if (parameter instanceof Byte)
+			return Byte.TYPE;
+		else if (parameter instanceof Short)
+			return Short.TYPE;
+		else if (parameter instanceof Character)
+			return Character.TYPE;
+		else if (parameter instanceof Long)
+			return Long.TYPE;
+		else if (parameter instanceof Float)
+			return Float.TYPE;
+		else if (parameter instanceof Double)
+			return Double.TYPE;
+		else if (parameter instanceof Boolean)
+			return Boolean.TYPE;
 		
-		return null;
+		return parameter.getClass();
 	}
 	
 	/**
@@ -34,16 +48,16 @@ public class CondorServer {
 	 */
 	public final Object execute(final CondorExecutionRequest req) 
 			throws Exception {
-		
 		System.out.println("Calling method...");
-		byte[] executable = req.getExecutable();
-		Hashtable<String, String> properties = req.getProperties();
-		
-		//TODO ponerle nombre al ejecutable
-		executable = BinaryManipulator.decompressByteArray(executable);
-		BinaryManipulator.writeByteArray("executable.class", executable);
-		
-		Object result = runCondorJob("executable.class", properties);
+		AbstractMFGS obj = req.getTarget();
+		Object[] args = req.getInfo().getArguments();
+		Class[] types = new Class[args.length];
+		for (int i = 0; i < types.length; i++) {
+			types[i] = convertParameterClass(args[i]);
+		}
+		Method m = obj.getClass().getMethod(req.getInfo().getServiceName(),
+				types);
+		Object result = m.invoke(obj, args);
 		System.out.println("Calling done! result = " + result);
 		return result;
 	}
@@ -69,7 +83,8 @@ public class CondorServer {
 						.readObject();
 				System.out.println("Condor execution request received!");
 				Object callResult = execute(obj);
-				CondorExecutionResult result = new CondorExecutionResult(callResult);
+				CondorExecutionResult result = new CondorExecutionResult(obj
+						.getTarget(), callResult);
 				ObjectOutputStream ostream = new ObjectOutputStream(socket
 						.getOutputStream());
 				ostream.writeObject(result);
