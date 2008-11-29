@@ -1,7 +1,5 @@
 
 
-import ibis.satin.SatinObject;
-
 import java.io.ByteArrayOutputStream;
 import java.util.zip.GZIPOutputStream;
 
@@ -22,25 +20,31 @@ import core.policy.ServiceCallInfo;
  */
 public class CondorInterceptor implements MethodInterceptor {
 
+	//LA CLASE COMPLETA QUE SE EJECUTA, QUE EXTIENDE ABSTRACTMFGS
 	protected MFGS ownerApp = null;
 
 	public Object invoke(MethodInvocation invoke) throws Throwable {
 		// Carga la clase Ibis asociada a la aplicación JGRIM
+		/*
 		SatinObject peer = (SatinObject) Class.forName(
 				getOwnerApp().getClass().getName() + "Peer").newInstance();
 		System.out.println("Creando Ibis peer: " + peer.getClass().getName());
 		setStateDependencies(getOwnerApp(), peer);
 		setOwnerAgent(peer);
+		*/
+		
 		ServiceCallInfo info = new ServiceCallInfo(
 				invoke.getMethod().getName(), invoke.getArguments());
-		IbisExecutionRequest req = new IbisExecutionRequest(peer, info);
+		
+		CondorExecutionRequest req = new CondorExecutionRequest((AbstractMFGS)ownerApp, info);
 		System.out.println("Enviando a nameserver: "
 				+ NetworkConfigurator.IBIS_SERVER + ":"
 				+ NetworkConfigurator.IBIS_SERVER_PORT);
+		
 		CondorClient client = new CondorClient(NetworkConfigurator.IBIS_SERVER,
 				NetworkConfigurator.IBIS_SERVER_PORT);
-		IbisExecutionResult result = client.execute(req);
-		setStateDependencies(result.getTarget(), getOwnerApp());
+		CondorExecutionResult result = client.execute(req);
+		//setStateDependencies(result.getTarget(), getOwnerApp());
 		return result.getResult();
 	}
 

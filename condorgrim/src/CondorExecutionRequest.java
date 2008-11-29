@@ -1,5 +1,6 @@
 import java.io.Serializable;
-import java.util.Hashtable;
+import core.policy.ServiceCallInfo;
+
 
 /**
  * 
@@ -7,47 +8,46 @@ import java.util.Hashtable;
  *
  */
 public class CondorExecutionRequest implements Serializable {
-	
+
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1342799743777536288L;
 	
 	/**
-	 * Ejecutable a correr.
+	 * Clase target.
 	 */
-	private byte[] executable;
+	private AbstractMFGS target;
 	
 	/**
-	 * Propiedades a setear en la ejecucion del trabajo en condor.
+	 * Propiedades de invocacion.
 	 */
-	private Hashtable<String, String> properties;
+	private ServiceCallInfo info;
 	
 	/**
 	 * Constructor de la clase.
-	 * @param iproperties Propiedades a setear en la ejecucion
-	 * del trabajo en condor
-	 * @param toRun Ejecutable a correr
+	 * @param itarget Clase target
+	 * @param iinfo Propiedades de invocacion
 	 */
-	public CondorExecutionRequest(final byte[] toRun, 
-			final Hashtable<String, String> iproperties) {
-		this.executable = toRun;
-		this.properties = iproperties;
+	public CondorExecutionRequest(final AbstractMFGS itarget, 
+			final ServiceCallInfo iinfo) {
+		this.target = itarget;
+		this.info = iinfo;
 	}
 	
 	/**
-	 * Retorna el ejecutable.
-	 * @return byte[]
+	 * Retorna la clase target.
+	 * @return AbstractMFGS
 	 */
-	public final byte[] getExecutable() {
-		return executable;
+	public final AbstractMFGS getTarget() {
+		return target;
 	}
 	
 	/**
-	 * Retorna las propiedades a setear en la ejecucion.
-	 * @return Hashtable de propiedades
+	 * Retorna las propiedades de invocacion.
+	 * @return ServiceCallInfo
 	 */
-	public final Hashtable<String, String> getProperties() {
-		return properties;
+	public final ServiceCallInfo getInfo() {
+		return info;
 	}
 }
