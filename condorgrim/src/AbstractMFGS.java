@@ -1,4 +1,17 @@
+import java.io.File;
+import java.net.URL;
+import java.util.Dictionary;
+import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.Iterator;
+
+import condorAPI.Cluster;
+import condorAPI.Condor;
+import condorAPI.CondorException;
+import condorAPI.Event;
+import condorAPI.Handler;
+import condorAPI.Job;
+import condorAPI.JobDescription;
 
 import core.MFGS;
 
@@ -15,7 +28,47 @@ public abstract class AbstractMFGS extends MFGS {
 	}
 
 	public Object doRun(byte[] executable, Hashtable<String, String> properties) {
-		//TODO CUERPO DE LA EJECUCION, se debe grabar el archivo a disco.
+		//TODO CUERPO DE LA EJECUCION, 
+		
+		//Se debe grabar el archivo a disco.
+		byte[] toRun = BinaryManipulator.decompressByteArray(executable);
+		BinaryManipulator.writeByteArray("executable", toRun);
+		
+		//TODO Ejecucion de condor, no se lo que hace setDebug a ciencia cierta
+		Condor.setDebug(true);
+		Condor condor = new Condor();
+		
+		JobDescription jd = new JobDescription();
+		Enumeration<String> auxEnum = properties.keys();
+		String key;		
+		try {
+			//AGREGAR EL EJECUTABLE
+			String path = this.getClass().getResource("executable").getPath();
+			jd.addAttribute("executable", path);
+			
+			//Agregar el resto de las propiedades
+			while(auxEnum.hasMoreElements()){
+				key = auxEnum.nextElement();
+				jd.addAttribute(key, properties.get(key));
+			}
+			jd.addQueue();
+
+			jd.setHandlerOnSuccess(new Handler(){
+				public void handle(Event e){
+					System.err.println("success " + e);
+				}
+			});
+
+			Cluster cluster = condor.submit(jd);
+			System.out.println("Job submitted to Condor");
+			cluster.waitFor();
+			
+		} catch (CondorException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		System.out.println("Execution complete");	
 		return null;
 	}
 
