@@ -8,7 +8,7 @@ import org.aopalliance.intercept.MethodInvocation;
 import org.apache.commons.beanutils.BeanUtilsBean;
 import org.springframework.beans.BeanUtils;
 
-import utils.NetworkConfigurator;
+//import utils.NetworkConfigurator;
 import core.MFGS;
 import core.mobility.io.SerializerObjectOutputStream;
 import core.policy.ServiceCallInfo;
@@ -38,11 +38,11 @@ public class CondorInterceptor implements MethodInterceptor {
 		
 		CondorExecutionRequest req = new CondorExecutionRequest((AbstractMFGS)ownerApp, info);
 		System.out.println("Enviando a nameserver: "
-				+ NetworkConfigurator.IBIS_SERVER + ":"
-				+ NetworkConfigurator.IBIS_SERVER_PORT);
+				+ NetworkConfigurator.CONDOR_SERVER + ":"
+				+ NetworkConfigurator.CONDOR_SERVER_PORT);
 		
-		CondorClient client = new CondorClient(NetworkConfigurator.IBIS_SERVER,
-				NetworkConfigurator.IBIS_SERVER_PORT);
+		CondorClient client = new CondorClient(NetworkConfigurator.CONDOR_SERVER,
+				NetworkConfigurator.CONDOR_SERVER_PORT);
 		CondorExecutionResult result = client.execute(req);
 		//setStateDependencies(result.getTarget(), getOwnerApp());
 		return result.getResult();
