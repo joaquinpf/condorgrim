@@ -4,7 +4,7 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="lib/classad.jar"/>
 	<classpathentry kind="lib" path="lib/condorAPI.jar"/>
-	<classpathentry kind="lib" path="G:/Documents and Settings/Kireta/Desktop/JGRIM.jar"/>
+	<classpathentry kind="lib" path="D:/Documentos/Marcos/Facultad 2008/Primer cuatr/Grid_Herramientas/JGRIM.jar"/>
 	<classpathentry kind="lib" path="lib/aopalliance.jar"/>
 	<classpathentry kind="lib" path="lib/spring-beans.jar"/>
 	<classpathentry kind="lib" path="lib/commons-beanutils.jar"/>
