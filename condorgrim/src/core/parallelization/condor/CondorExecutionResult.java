@@ -1,3 +1,4 @@
+package core.parallelization.condor;
 
 import java.io.Serializable;
 
