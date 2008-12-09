@@ -1,3 +1,4 @@
+package core.parallelization.condor;
 
 
 import java.io.ByteArrayOutputStream;
@@ -7,6 +8,8 @@ import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
 import org.apache.commons.beanutils.BeanUtilsBean;
 import org.springframework.beans.BeanUtils;
+
+import utils.NetworkConfigurator;
 
 //import utils.NetworkConfigurator;
 import core.MFGS;
