@@ -11,6 +11,8 @@ public class CondorExecutionResult implements Serializable {
 
 	//TODO meter lo que sea que devuelva condor como respuesta
 	private Object result;
+
+	private static final long serialVersionUID = 134987332777536288L;
 	
 	private AbstractMFGS target;
 

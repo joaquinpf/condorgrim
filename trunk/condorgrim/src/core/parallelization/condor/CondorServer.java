@@ -1,4 +1,5 @@
 package core.parallelization.condor;
+import java.io.InvalidClassException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.lang.reflect.InvocationTargetException;
@@ -36,8 +37,10 @@ public class CondorServer {
 			return Double.TYPE;
 		else if (parameter instanceof Boolean)
 			return Boolean.TYPE;
-		
-		return parameter.getClass();
+		if (parameter != null)
+			return parameter.getClass();
+		else
+			return null;
 	}
 	
 	/**
@@ -56,11 +59,15 @@ public class CondorServer {
 		for (int i = 0; i < types.length; i++) {
 			types[i] = convertParameterClass(args[i]);
 		}
-		Method m = obj.getClass().getMethod(req.getInfo().getServiceName(),
-				types);
-		Object result = m.invoke(obj, args);
-		System.out.println("Calling done! result = " + result);
-		return result;
+		if (obj != null && req != null){
+			Method m = obj.getClass().getMethod(req.getInfo().getServiceName(),
+					types);
+			Object result = m.invoke(obj, args);
+			System.out.println("Calling done! result = " + result);
+			return result;
+		}
+		else
+			return null;
 	}
 	
 	/**
@@ -73,8 +80,8 @@ public class CondorServer {
 		System.out.println("Opening server on : " + port);
 		ServerSocket ss = new ServerSocket(port);
 		System.out.println("Opened.");
+		Socket socket = null;
 		while (true) {
-			Socket socket = null;
 			try {
 				System.out.println("Waiting for Condor execution requests...");
 				socket = ss.accept();
@@ -83,14 +90,20 @@ public class CondorServer {
 				CondorExecutionRequest obj = (CondorExecutionRequest) stream
 						.readObject();
 				System.out.println("Condor execution request received!");
-				Object callResult = execute(obj);
-				CondorExecutionResult result = new CondorExecutionResult(obj
-						.getTarget(), callResult);
-				ObjectOutputStream ostream = new ObjectOutputStream(socket
-						.getOutputStream());
-				ostream.writeObject(result);
-				ostream.flush();
-				ostream.close();
+				if (obj != null) {
+					Object callResult = execute(obj);
+					CondorExecutionResult result = new CondorExecutionResult(obj
+							.getTarget(), callResult);
+					ObjectOutputStream ostream = new ObjectOutputStream(socket
+							.getOutputStream());
+					ostream.writeObject(result);
+					ostream.flush();
+				}
+				else
+					System.out.println("Recibido un objeto null para su ejecucion.");
+			} catch(InvalidClassException e) {
+				e.printStackTrace();
+				throw e;
 			} catch (InvocationTargetException e) {
 				e.getCause().printStackTrace();
 				throw e;
@@ -112,7 +125,7 @@ public class CondorServer {
 	 * @throws Exception Exception
 	 */
 	public static void main(final String[] args) throws Exception {
-		int defaultPort = 9999;
+		int defaultPort = 9618;
 		if (args.length > 0) {
 			try {
 				defaultPort = Integer.parseInt(args[0]);

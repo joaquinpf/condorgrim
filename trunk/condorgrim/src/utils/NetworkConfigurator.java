@@ -14,7 +14,7 @@ public class NetworkConfigurator {
 
 	public static String CONDOR_SERVER = "localhost";
 
-	public static int CONDOR_SERVER_PORT = 9999;
+	public static int CONDOR_SERVER_PORT = 9618;
 
 	public static int CONTINUATION_SERVER_PORT = 9000;
 

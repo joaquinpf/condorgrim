@@ -2,6 +2,7 @@ package core.parallelization.condor;
 
 
 import java.io.ByteArrayOutputStream;
+import java.io.Serializable;
 import java.util.zip.GZIPOutputStream;
 
 import org.aopalliance.intercept.MethodInterceptor;
@@ -21,10 +22,12 @@ import core.policy.ServiceCallInfo;
  * @author Joaquín Pérez Fuentes y Marcos Steimbach
  *
  */
-public class CondorInterceptor implements MethodInterceptor {
+public class CondorInterceptor implements MethodInterceptor, Serializable {
 
 	//LA CLASE COMPLETA QUE SE EJECUTA, QUE EXTIENDE ABSTRACTMFGS
 	protected MFGS ownerApp = null;
+	
+	private static final long serialVersionUID = 134223443754436288L;
 
 	public Object invoke(MethodInvocation invoke) throws Throwable {
 		// Carga la clase Ibis asociada a la aplicaciÃ³n JGRIM
@@ -46,9 +49,13 @@ public class CondorInterceptor implements MethodInterceptor {
 		
 		CondorClient client = new CondorClient(NetworkConfigurator.CONDOR_SERVER,
 				NetworkConfigurator.CONDOR_SERVER_PORT);
-		CondorExecutionResult result = client.execute(req);
-		//setStateDependencies(result.getTarget(), getOwnerApp());
-		return result.getResult();
+		if (req != null){
+			CondorExecutionResult result = client.execute(req);
+			//setStateDependencies(result.getTarget(), getOwnerApp());
+			if (result != null)
+				return result.getResult();
+		}
+		return null;
 	}
 
 	public void setOwnerApp(MFGS ownerApp) {
