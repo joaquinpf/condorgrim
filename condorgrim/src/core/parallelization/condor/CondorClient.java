@@ -1,6 +1,7 @@
 package core.parallelization.condor;
 
 
+import java.io.EOFException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
@@ -15,12 +16,12 @@ public class CondorClient {
 	/**
 	 * Host condor.
 	 */
-	private String condorHost = null;
+	private String condorHost = "localhost";
 	
 	/**
 	 * Puerto del host condor.
 	 */
-	int port = 9999;
+	int port = 9618;
 
 	/**
 	 * Constructor de la clase.
@@ -45,12 +46,22 @@ public class CondorClient {
 			socket = new Socket(condorHost, port);
 			ObjectOutputStream ostream = new ObjectOutputStream(socket
 					.getOutputStream());
-			ostream.writeObject(req);
-			ostream.flush();
+			if (req != null) {
+				ostream.writeObject(req);
+				ostream.flush();
+			}
 			ObjectInputStream istream = new ObjectInputStream(socket
 					.getInputStream());
-			return (CondorExecutionResult) istream.readObject();
-		} finally {
+			if (istream != null)
+				return (CondorExecutionResult) istream.readObject();
+			else
+				return null;
+			} 
+		catch (EOFException e) {
+			System.out.println("Sin resultado en la ejecucion de la tarea.");
+			e.printStackTrace();
+		}
+		catch (Exception ee) {
 			try {
 				if (socket != null) {
 					socket.close();
@@ -58,6 +69,8 @@ public class CondorClient {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
+			ee.printStackTrace();
 		}
+		return null;
 	}
 }
