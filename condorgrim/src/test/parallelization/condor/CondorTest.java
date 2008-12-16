@@ -1,5 +1,7 @@
 package test.parallelization.condor;
 
+import java.util.Hashtable;
+
 import core.parallelization.condor.AbstractMFGS;
 import core.parallelization.condor.CondorMethods;
 
@@ -9,9 +11,13 @@ public class CondorTest extends AbstractMFGS {
 
 	@Override
 	public void run() {
+		byte[] b = (new String("pepe")).getBytes();
 		CondorMethods selfDep = getselfdependency();
-		if (selfDep != null)
-			selfDep.doRun(null, null);
+		String result;
+		if (selfDep != null) {
+			result = (String) selfDep.doRun(b,new Hashtable<String, String>());
+			System.out.println(result);
+		}
 	}
 }
 

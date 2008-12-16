@@ -1,19 +1,13 @@
 package core.parallelization.condor;
-import java.io.File;
-import java.net.URL;
-import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.Hashtable;
-import java.util.Iterator;
 
 import condorAPI.Cluster;
 import condorAPI.Condor;
 import condorAPI.CondorException;
 import condorAPI.Event;
 import condorAPI.Handler;
-import condorAPI.Job;
 import condorAPI.JobDescription;
-
 import core.MFGS;
 
 public abstract class AbstractMFGS extends MFGS {
@@ -72,11 +66,13 @@ public abstract class AbstractMFGS extends MFGS {
 				e1.printStackTrace();
 			}
 			
-			System.out.println("Execution complete");	
-			return null;
+			String result = "Execution complete";
+			System.out.println(result);	
+			return result;
 		}
-		System.out.println("Se recibieron parametros vacios (ejecutable y/o propiedades) en AbstractMFGS.doRun( ... )");
-		return null;
+		String result = "Se recibieron parametros vacios (ejecutable y/o propiedades) en AbstractMFGS.doRun( ... )";
+		System.out.println(result);
+		return result;
 	}
 
 	public abstract void run();
