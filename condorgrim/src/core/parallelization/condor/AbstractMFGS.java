@@ -75,9 +75,10 @@ public abstract class AbstractMFGS extends MFGS {
 				return result;
 			}
 			
-			String result = "Execution complete";
-			System.out.println(result);	
-			return result;
+			byte[] ret = BinaryManipulator.readByteArray("stdout.txt");
+			ret = BinaryManipulator.compressByteArray(ret);
+			System.out.println("Execution complete");	
+			return ret;
 		}
 		String result = "Se recibieron parametros vacios (ejecutable y/o propiedades) en AbstractMFGS.doRun( ... )";
 		System.out.println(result);
