@@ -28,7 +28,7 @@ public abstract class AbstractMFGS extends MFGS {
 		if (executable != null && properties != null){
 			//TODO CUERPO DE LA EJECUCION, 
 
-			//Se debe grabar el archivo a disco.
+			//Se debe grabar el archivo a disco, nombre generico.
 			byte[] toRun = BinaryManipulator.decompressByteArray(executable);
 			BinaryManipulator.writeByteArray("executable", toRun);
 		
@@ -40,14 +40,21 @@ public abstract class AbstractMFGS extends MFGS {
 			Enumeration<String> auxEnum = properties.keys();
 			String key;		
 			try {
-				//AGREGAR EL EJECUTABLE
+				//Agregar el ejecutable, log y salidas stdout y stderr
 				String path = "";  //this.getClass().getResource("executable").getPath();
 				jd.addAttribute("executable", path);
+				jd.addAttribute("output", "stdout.txt");
+				jd.addAttribute("error", "stderr.txt");
+				jd.addAttribute("log_xml", "True");
+				jd.addAttribute("log", "log.txt");
 				
 				//Agregar el resto de las propiedades
 				while(auxEnum.hasMoreElements()){
 					key = auxEnum.nextElement();
-					jd.addAttribute(key, properties.get(key));
+					if(key != "executable" && key != "output" && key != "error" && 
+							key != "log" && key != "log_xml"){
+						jd.addAttribute(key, properties.get(key));
+					}
 				}
 				jd.addQueue();
 
@@ -62,8 +69,10 @@ public abstract class AbstractMFGS extends MFGS {
 				cluster.waitFor();
 				
 			} catch (CondorException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
+				String result = "Execution failed with CondorExeption";
+				System.out.println(result);	
+				return result;
 			}
 			
 			String result = "Execution complete";
