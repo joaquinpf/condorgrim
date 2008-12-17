@@ -30,14 +30,6 @@ public class CondorInterceptor implements MethodInterceptor, Serializable {
 	private static final long serialVersionUID = 134223443754436288L;
 
 	public Object invoke(MethodInvocation invoke) throws Throwable {
-		// Carga la clase Ibis asociada a la aplicación JGRIM
-		/*
-		SatinObject peer = (SatinObject) Class.forName(
-				getOwnerApp().getClass().getName() + "Peer").newInstance();
-		System.out.println("Creando Ibis peer: " + peer.getClass().getName());
-		setStateDependencies(getOwnerApp(), peer);
-		setOwnerAgent(peer);
-		*/
 		
 		ServiceCallInfo info = new ServiceCallInfo(
 				invoke.getMethod().getName(), invoke.getArguments());
