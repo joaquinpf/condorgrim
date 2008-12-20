@@ -124,7 +124,7 @@ public class CondorServer {
 	 * @throws Exception Exception
 	 */
 	public static void main(final String[] args) throws Exception {
-		int defaultPort = 9618;
+		int defaultPort = 9500;
 		if (args.length > 0) {
 			try {
 				defaultPort = Integer.parseInt(args[0]);

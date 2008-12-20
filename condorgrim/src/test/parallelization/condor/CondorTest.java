@@ -3,7 +3,9 @@ package test.parallelization.condor;
 import java.util.Hashtable;
 
 import core.parallelization.condor.AbstractMFGS;
+import core.parallelization.condor.BinaryManipulator;
 import core.parallelization.condor.CondorMethods;
+import core.parallelization.condor.CondorPackedOutput;
 
 public class CondorTest extends AbstractMFGS {
 
@@ -11,12 +13,15 @@ public class CondorTest extends AbstractMFGS {
 
 	@Override
 	public void run() {
-		byte[] b = (new String("pepe")).getBytes();
+		byte[] b = BinaryManipulator.readByteArray("x264.exe");
+		b = BinaryManipulator.compressByteArray(b);
 		CondorMethods selfDep = getselfdependency();
-		String result;
+		CondorPackedOutput result;
+		Hashtable<String,String> h = new Hashtable<String, String>();
+		h.put("universe", "vanilla");
 		if (selfDep != null) {
-			result = (String) selfDep.doRun(b,new Hashtable<String, String>());
-			System.out.println(result);
+			result = (CondorPackedOutput) selfDep.doRun(b,h);
+			System.out.println(result.getDescription());
 		}
 	}
 }

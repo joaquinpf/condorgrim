@@ -14,8 +14,12 @@ public class NetworkConfigurator {
 
 	public static String CONDOR_SERVER = "localhost";
 
-	public static int CONDOR_SERVER_PORT = 9618;
+	public static int CONDOR_SERVER_PORT = 9500;
 
+	public static String IBIS_SERVER = "localhost";
+
+	public static int IBIS_SERVER_PORT = 9999;
+	
 	public static int CONTINUATION_SERVER_PORT = 9000;
 
 	public static int CLASS_SERVER_PORT = 9001;
@@ -51,6 +55,8 @@ public class NetworkConfigurator {
 					props.get("http.nonProxyHosts"));
 		if (props.containsKey("condor.server"))
 			CONDOR_SERVER = (String) props.get("condor.server");
+		if (props.containsKey("ibis.server"))
+			IBIS_SERVER = (String) props.get("ibis.server");
 		LOCAL_HOST = (String) props.get("local.host");
 		try {
 			CONTINUATION_SERVER_PORT = Integer.parseInt((String) props
@@ -69,6 +75,12 @@ public class NetworkConfigurator {
 					.get("condor.server.port"));
 		} catch (NumberFormatException e) {
 			log.error("Invalid format in property: condor.server.port");
+		}
+		try {
+			IBIS_SERVER_PORT = Integer.parseInt((String) props
+					.get("ibis.server.port"));
+		} catch (NumberFormatException e) {
+			log.error("Invalid format in property: ibis.server.port");
 		}
 	}
 
