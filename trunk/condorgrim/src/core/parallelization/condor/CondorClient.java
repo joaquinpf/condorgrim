@@ -21,7 +21,7 @@ public class CondorClient {
 	/**
 	 * Puerto del host condor.
 	 */
-	int port = 9618;
+	int port = 9500;
 
 	/**
 	 * Constructor de la clase.

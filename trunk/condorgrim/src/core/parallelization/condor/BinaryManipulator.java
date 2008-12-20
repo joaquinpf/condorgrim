@@ -47,6 +47,8 @@ public class BinaryManipulator {
 			for (int i = 0; i < cantBytes; i++) {
 				out.write(bytearray[i]);
 			}
+			out.flush();
+			out.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
