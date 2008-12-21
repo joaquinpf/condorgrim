@@ -1,51 +1,49 @@
 package core.parallelization.condor;
+
 import java.io.Serializable;
 import core.policy.ServiceCallInfo;
 
-
+// TODO: Auto-generated Javadoc
 /**
+ * The Class CondorExecutionRequest. Encapsulates a request to a CondorServer.
  * 
  * @author Joaquín Pérez Fuentes y Marcos Steimbach
- *
  */
 public class CondorExecutionRequest implements Serializable {
 
-	/**
-	 * 
-	 */
+	/** The Constant serialVersionUID. */
 	private static final long serialVersionUID = 1342799743777536288L;
-	
-	/**
-	 * Clase target.
-	 */
+
+	/** Target. */
 	private AbstractMFGS target;
-	
-	/**
-	 * Propiedades de invocacion.
-	 */
+
+	/** Invocation properties. */
 	private ServiceCallInfo info;
-	
+
 	/**
-	 * Constructor de la clase.
-	 * @param itarget Clase target
-	 * @param iinfo Propiedades de invocacion
+	 * Class constructor
+	 * 
+	 * @param itarget target
+	 * @param iinfo Invocation properties
 	 */
-	public CondorExecutionRequest(final AbstractMFGS itarget, 
+	public CondorExecutionRequest(final AbstractMFGS itarget,
 			final ServiceCallInfo iinfo) {
 		this.target = itarget;
 		this.info = iinfo;
 	}
-	
+
 	/**
-	 * Retorna la clase target.
-	 * @return AbstractMFGS
+	 * Gets the target.
+	 * 
+	 * @return the target
 	 */
 	public final AbstractMFGS getTarget() {
 		return target;
 	}
-	
+
 	/**
-	 * Retorna las propiedades de invocacion.
+	 * Gets the invocation properties.
+	 * 
 	 * @return ServiceCallInfo
 	 */
 	public final ServiceCallInfo getInfo() {

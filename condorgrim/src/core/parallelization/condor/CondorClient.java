@@ -1,32 +1,28 @@
 package core.parallelization.condor;
 
-
 import java.io.EOFException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
 /**
+ * The Class CondorClient.
  * 
  * @author Joaquín Pérez Fuentes y Marcos Steimbach
- *
  */
 public class CondorClient {
-	
-	/**
-	 * Host condor.
-	 */
+
+	/** Condor host. */
 	private String condorHost = "localhost";
-	
-	/**
-	 * Puerto del host condor.
-	 */
+
+	/** Condor host port. */
 	int port = 9500;
 
 	/**
-	 * Constructor de la clase.
-	 * @param icondorHost Host condor
-	 * @param iport Puerto del host condor
+	 * Class constructor.
+	 * 
+	 * @param icondorHost Condor host
+	 * @param iport Condor host port
 	 */
 	public CondorClient(final String icondorHost, final int iport) {
 		this.condorHost = icondorHost;
@@ -34,9 +30,12 @@ public class CondorClient {
 	}
 
 	/**
-	 * Envia el pedido de ejecucion al server.
-	 * @param req Pedido de ejecucion
-	 * @return CondorExecutionResult resultante de la ejecucion
+	 * Send the CondorExecutionRequest to the server.
+	 * 
+	 * @param req Condor execution request
+	 * 
+	 * @return CondorExecutionResult Execution result
+	 * 
 	 * @throws Exception Exeption
 	 */
 	public final CondorExecutionResult execute(final CondorExecutionRequest req)
@@ -56,12 +55,10 @@ public class CondorClient {
 				return (CondorExecutionResult) istream.readObject();
 			else
 				return null;
-			} 
-		catch (EOFException e) {
-			System.out.println("Sin resultado en la ejecucion de la tarea.");
+		} catch (EOFException e) {
+			System.out.println("No result in task execution.");
 			e.printStackTrace();
-		}
-		catch (Exception ee) {
+		} catch (Exception ee) {
 			try {
 				if (socket != null) {
 					socket.close();
