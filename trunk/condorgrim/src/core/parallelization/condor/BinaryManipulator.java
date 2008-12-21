@@ -1,4 +1,5 @@
 package core.parallelization.condor;
+
 import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -8,15 +9,19 @@ import java.util.zip.Deflater;
 import java.util.zip.Inflater;
 
 /**
+ * The Class BinaryManipulator. This class handles loading and compressing of
+ * byte arrays.
  * 
  * @author Joaquín Alejandro Pérez Fuentes
- *
  */
 public class BinaryManipulator {
 
 	/**
-	 * La ruta debe estar completa.
+	 * Reads a file to a byte array. Route must be a valid input for
+	 * "FileInputStream"
+	 * 
 	 * @param file file
+	 * 
 	 * @return byte[]
 	 */
 	public static byte[] readByteArray(final String file) {
@@ -35,13 +40,15 @@ public class BinaryManipulator {
 	}
 
 	/**
+	 * Write byte array.
 	 * 
 	 * @param newFile newFile
 	 * @param bytearray bytearray
 	 */
-	public static void writeByteArray(final String newFile, final byte[] bytearray) {
+	public static void writeByteArray(final String newFile,
+			final byte[] bytearray) {
 		try {
-			long cantBytes = bytearray.length; 
+			long cantBytes = bytearray.length;
 			FileOutputStream out = new FileOutputStream(newFile);
 
 			for (int i = 0; i < cantBytes; i++) {
@@ -53,71 +60,75 @@ public class BinaryManipulator {
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
+	 * Compress byte array.
 	 * 
 	 * @param bytearray bytearray
+	 * 
 	 * @return byte[]
 	 */
 	public static byte[] compressByteArray(final byte[] bytearray) {
-	    // Compressor with highest level of compression
-	    Deflater compressor = new Deflater();
-	    compressor.setLevel(Deflater.BEST_COMPRESSION);
-	    
-	    // Give the compressor the data to compress
-	    compressor.setInput(bytearray);
-	    compressor.finish();
-	    
-	    // Create an expandable byte array to hold the compressed data.
-	    // It is not necessary that the compressed data will be smaller than
-	    // the uncompressed data.
-	    ByteArrayOutputStream bos = new ByteArrayOutputStream(bytearray.length);
-	    
-	    // Compress the data
-	    byte[] buf = new byte[1024];
-	    while (!compressor.finished()) {
-	        int count = compressor.deflate(buf);
-	        bos.write(buf, 0, count);
-	    }
-	    try {
-	        bos.close();
-	    } catch (IOException e) {
+		// Compressor with highest level of compression
+		Deflater compressor = new Deflater();
+		compressor.setLevel(Deflater.BEST_COMPRESSION);
+
+		// Give the compressor the data to compress
+		compressor.setInput(bytearray);
+		compressor.finish();
+
+		// Create an expandable byte array to hold the compressed data.
+		// It is not necessary that the compressed data will be smaller than
+		// the uncompressed data.
+		ByteArrayOutputStream bos = new ByteArrayOutputStream(bytearray.length);
+
+		// Compress the data
+		byte[] buf = new byte[1024];
+		while (!compressor.finished()) {
+			int count = compressor.deflate(buf);
+			bos.write(buf, 0, count);
+		}
+		try {
+			bos.close();
+		} catch (IOException e) {
 			e.printStackTrace();
-	    }
-	    
-	    // Get the compressed data
-	    return bos.toByteArray();	
+		}
+
+		// Get the compressed data
+		return bos.toByteArray();
 	}
-	
+
 	/**
- 	* 
- 	* @param bytearray bytearray
- 	* @return byte[] 
- 	*/
+	 * Decompress byte array.
+	 * 
+	 * @param bytearray bytearray
+	 * 
+	 * @return byte[]
+	 */
 	public static byte[] decompressByteArray(final byte[] bytearray) {
-	    Inflater decompressor = new Inflater();
-	    decompressor.setInput(bytearray);
-	    
-	    // Create an expandable byte array to hold the decompressed data
-	    ByteArrayOutputStream bos = new ByteArrayOutputStream(bytearray.length);
-	    
-	    // Decompress the data
-	    byte[] buf = new byte[1024];
-	    while (!decompressor.finished()) {
-	        try {
-	            int count = decompressor.inflate(buf);
-	            bos.write(buf, 0, count);
-	        } catch (DataFormatException e) {
+		Inflater decompressor = new Inflater();
+		decompressor.setInput(bytearray);
+
+		// Create an expandable byte array to hold the decompressed data
+		ByteArrayOutputStream bos = new ByteArrayOutputStream(bytearray.length);
+
+		// Decompress the data
+		byte[] buf = new byte[1024];
+		while (!decompressor.finished()) {
+			try {
+				int count = decompressor.inflate(buf);
+				bos.write(buf, 0, count);
+			} catch (DataFormatException e) {
 				e.printStackTrace();
-	        }
-	    }
-	    try {
-	        bos.close();
-	    } catch (IOException e) {
+			}
+		}
+		try {
+			bos.close();
+		} catch (IOException e) {
 			e.printStackTrace();
-	    }
-	    
-	    // Get the decompressed data
-	    return bos.toByteArray();
+		}
+
+		// Get the decompressed data
+		return bos.toByteArray();
 	}
 }
