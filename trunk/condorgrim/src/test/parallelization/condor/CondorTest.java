@@ -5,8 +5,9 @@ package test.parallelization.condor;
 
 import java.util.Hashtable;
 
+import utils.BinaryManipulator;
+
 import core.parallelization.condor.AbstractMFGS;
-import core.parallelization.condor.BinaryManipulator;
 import core.parallelization.condor.CondorMethods;
 import core.parallelization.condor.CondorPackedOutput;
 
