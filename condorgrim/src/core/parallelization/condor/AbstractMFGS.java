@@ -8,6 +8,7 @@ import org.apache.log4j.PropertyConfigurator;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
 
+import utils.BinaryManipulator;
 import utils.FileUtils;
 import utils.NetworkConfigurator;
 import condorAPI.Cluster;
@@ -112,7 +113,10 @@ public abstract class AbstractMFGS extends MFGS {
 				jd.addAttribute("error", localStderr);
 				jd.addAttribute("log_xml", "True");
 				jd.addAttribute("log", localLog);
-
+				if(properties.get("universe") == null){
+					jd.addAttribute("universe", "vanilla");
+				}				
+				
 				// Add user specific settings
 				while (auxEnum.hasMoreElements()) {
 					key = auxEnum.nextElement();

@@ -1,4 +1,4 @@
-package core.parallelization.condor;
+package utils;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
