@@ -32,6 +32,6 @@
 	<classpathentry kind="lib" path="lib/uddi4j.jar"/>
 	<classpathentry kind="lib" path="lib/wsdl4j.jar"/>
 	<classpathentry kind="lib" path="lib/wsif.jar"/>
-	<classpathentry kind="lib" path="G:/Documents and Settings/Kireta/Desktop/JGRIM.jar"/>
+	<classpathentry kind="lib" path="lib/JGRIM.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

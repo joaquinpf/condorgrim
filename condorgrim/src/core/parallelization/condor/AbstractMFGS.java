@@ -1,6 +1,7 @@
 package core.parallelization.condor;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Enumeration;
 import java.util.Hashtable;
 
@@ -37,15 +38,15 @@ public abstract class AbstractMFGS extends MFGS {
 	private static final long serialVersionUID = 1342799743754436288L;
 
 	/** The Constant STDOUT, path to the output stream output. */
-	private static final String STDOUT = "/temp/stdout";
+	private static final String STDOUT = "stdout";
 
 	/** The Constant STDERR, path to the error stream output. */
-	private static final String STDERR = "/temp/stderr";
+	private static final String STDERR = "stderr";
 
 	/** The Constant LOG, path to the log file. */
-	private static final String LOG = "/temp/log";
+	private static final String LOG = "log";
 
-	private static final String EXECUTABLE = "temp/executable";
+	private static final String EXECUTABLE = "executable";
 
 	/**
 	 * Gets the selfdependency.
@@ -71,7 +72,7 @@ public abstract class AbstractMFGS extends MFGS {
 	 * response with the outputs of stdout, stderr, log and a brief description
 	 * fitting the execution.
 	 * 
-	 * @param executable the executable to be run
+	 * @param executable the executable to be run 
 	 * @param properties the properties to be set for the condor job. Properties
 	 *            "executable", "log", "output", "error" and "log_xml" will be
 	 *            overriden to fit standard practices for the method
@@ -81,21 +82,37 @@ public abstract class AbstractMFGS extends MFGS {
 	public Object doRun(byte[] executable, Hashtable<String, String> properties) {
 		// If parameters are not null
 		if (executable != null && properties != null) {
-
-			// We have to be careful not to overwrite files if there are
-			// concurrent executions
-			String hash = Integer.toString(this.hashCode());
-
-			String localStdout = STDOUT + hash;
-			String localStderr = STDERR + hash;
-			String localLog = LOG + hash;
-			String localExecutable = EXECUTABLE + hash;
-
 			// Writing executable file to disk with a generic name.
-			File f = new File("temp/");
+			String hash = Integer.toString(this.hashCode());
+			File f = new File("temp" + hash + "/");
 			if (!f.exists()) {
 				f.mkdir();
 			}
+
+			// We have to be careful not to overwrite files if there are
+			// concurrent executions
+			
+			String localStdout;
+			String localStderr;
+			String localLog;
+			String localExecutable;
+			
+			try {
+				String tempPath = f.getCanonicalPath() + "/" ;
+				localStdout = tempPath + STDOUT + hash;
+				localStderr = tempPath + STDERR + hash;
+				localLog = tempPath + LOG + hash;
+				localExecutable = tempPath + EXECUTABLE + hash;
+
+			} catch (IOException e2) {
+				// TODO Auto-generated catch block
+				e2.printStackTrace();
+				localStdout = STDOUT + hash;
+				localStderr = STDERR + hash;
+				localLog = LOG + hash;
+				localExecutable = EXECUTABLE + hash;
+			}
+			
 			byte[] toRun = BinaryManipulator.decompressByteArray(executable);
 			BinaryManipulator.writeByteArray(localExecutable, toRun);
 
@@ -152,17 +169,19 @@ public abstract class AbstractMFGS extends MFGS {
 				System.out.println(result);
 				CondorPackedOutput c = new CondorPackedOutput();
 				c.setDescription(result);
-				FileUtils.cleanUpDirectory("temp/", hash);
+				FileUtils.cleanUpDirectory(f);
+				f.delete();
 				return c;
 			}
 			String result = "Execution complete";
 			System.out.println(result);
 			CondorPackedOutput c = new CondorPackedOutput();
 			c.setDescription(result);
-			c.setStderr(BinaryManipulator.readByteArray(STDERR));
-			c.setStdout(BinaryManipulator.readByteArray(STDOUT));
-			c.setLog(BinaryManipulator.readByteArray(LOG));
-			FileUtils.cleanUpDirectory("temp/", hash);
+			c.setStderr(BinaryManipulator.readByteArray(localStderr));
+			c.setStdout(BinaryManipulator.readByteArray(localStdout));
+			c.setLog(BinaryManipulator.readByteArray(localLog));
+			FileUtils.cleanUpDirectory(f);
+			f.delete();
 			return c;
 		}
 		String result = "Null parameters recieved in AbstractMFGS.doRun(...) "

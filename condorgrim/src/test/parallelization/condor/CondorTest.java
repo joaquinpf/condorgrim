@@ -24,7 +24,7 @@ public class CondorTest extends AbstractMFGS {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see core.parallelization.condor.AbstractMFGS#run()
 	 */
 	@Override

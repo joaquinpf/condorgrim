@@ -14,21 +14,19 @@ public class FileUtils {
 	/**
 	 * Clean up directory.
 	 * 
-	 * @param directory the directory
+	 * @param f the directory
 	 */
-	public static void cleanUpDirectory(String directory, String hash) {
-		File dir = new File(directory);
+	public static void cleanUpDirectory(File f) {
 
-		String[] children = dir.list();
+		String[] children = f.list();
 		if (children == null) {
 			// Either dir does not exist or is not a directory
 		} else {
 			for (int i = 0; i < children.length; i++) {
-				File file = new File(directory, children[i]);
-				if (file.getName().contains(hash)) {
-					System.out.print(file + "  deleted : " + file.delete());
-				}
+				File file = new File(f, children[i]);
+				System.out.print(file + "  deleted : " + file.delete());
 			}
 		}
 	}
 }
+
